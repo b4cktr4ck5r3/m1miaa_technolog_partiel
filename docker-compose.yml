@@ -1,12 +1,10 @@
 version: '3'
 services:
     front:
-        image: nginx:latest
+        image: backtrack5r3/exam_front:1.0-dev
         ports:
             - "80:80"
-        volumes: 
-            - ./back/front:/usr/share/nginx/html
     back:
-        image: backtrack5r3/exam1_back:1.0-dev
+        image: backtrack5r3/exam_back:1.0-dev
         ports:
             - "3000:3000"

@@ -1,0 +1,9 @@
+# use node public image
+FROM nginx:latest
+
+# define project folder
+WORKDIR /usr/share/nginx/html
+
+# copy project files
+COPY *.html .
+COPY js/* ./js/
