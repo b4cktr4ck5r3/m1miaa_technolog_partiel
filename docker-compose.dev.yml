@@ -1,12 +1,14 @@
 version: '3'
 services:
     front:
+        container_name: partiel_front
         image: nginx:latest
         ports:
             - "80:80"
         volumes: 
             - ./dev/front:/usr/share/nginx/html
     back:
+        container_name: partiel_back
         build:
             context: dev/back/
             dockerfile: Dockerfile.dev
@@ -14,3 +16,12 @@ services:
             - "3000:3000"
         volumes:
             - ./dev/back:/usr/app
+    database:
+        container_name: partiel_db
+        image: mongo:latest
+        ports:
+            - "27017:27017"
+        environment: 
+            MONGO_INITDB_ROOT_USERNAME: partiel
+            MONGO_INITDB_ROOT_PASSWORD: partiel
+            MONGO_INIT_DATABASE: partiel

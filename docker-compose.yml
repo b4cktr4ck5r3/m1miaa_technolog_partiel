@@ -1,10 +1,21 @@
 version: '3'
 services:
     front:
+        container_name: partiel_front
         image: backtrack5r3/exam_front:1.0-dev
         ports:
             - "80:80"
     back:
+        container_name: partiel_back
         image: backtrack5r3/exam_back:1.0-dev
         ports:
             - "3000:3000"
+    database:
+        container_name: partiel_db
+        image: mongo:latest
+        ports:
+            - "27017:27017"
+        environment: 
+            MONGO_INITDB_ROOT_USERNAME: partiel
+            MONGO_INITDB_ROOT_PASSWORD: partiel
+            MONGO_INIT_DATABASE: partiel
