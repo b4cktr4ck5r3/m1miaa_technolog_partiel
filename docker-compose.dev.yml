@@ -1,0 +1,16 @@
+version: '3'
+services:
+    front:
+        image: nginx:latest
+        ports:
+            - "80:80"
+        volumes: 
+            - ./dev/front:/usr/share/nginx/html
+    back:
+        build:
+            context: dev/back/
+            dockerfile: Dockerfile.dev
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./dev/back:/usr/app
