@@ -65,7 +65,7 @@
                     if (message.value === "") return;
 
                     let div = document.createElement("div");
-                    div.textContent = msg;
+                    div.textContent = "User: " + msg;
                     div.setAttribute('class', 'container');
                     chat.insertBefore(div, inputs);
                     message.value = "";
@@ -74,7 +74,7 @@
 
             function createDivBotMessage(text){
                 let div = document.createElement("div");
-                div.textContent = text;
+                div.textContent = "Bot: " + text;
                 div.setAttribute('class', 'container');
                 chat.insertBefore(div, inputs);
                 message.value = "";
