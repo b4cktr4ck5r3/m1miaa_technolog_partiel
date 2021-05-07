@@ -8,3 +8,15 @@ async function getVersion(){
 async function getTestModel(){
     const model = await fetch('')
 }
+
+async function addNewEntry(){
+    const result = await fetch('http://localhost:3000/create', {
+        headers :{
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'post',
+        body: JSON.stringify({name:'FromScript'})
+    }).then(res => res.text());
+    return result;
+}
