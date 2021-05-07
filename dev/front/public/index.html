@@ -3,20 +3,90 @@
     <header>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <script src="js/script.js"></script>
-        <script>
-            async function main(){
-                console.log(await getVersion());
-                console.log(await addNewEntry());
-            }
-            
-            main();
-        </script>
     </header>
 
+    <style>
+        .container{
+            border: 2px solid #000;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+
     <body>
-        <h1>Index from front</h1>
+        <h1>Commandes de pizza</h1>
+
+        <h2>Chat</h2>
+        <p>Les commandes disponibles sont :<br>
+            - <b>!liste</b> pour afficher les pizzas disponibles<br>
+            - <b>!commander</b> <nom_pizza> pour commander une pizza<br>
+        </p>
+        <div class="container" id="chat">
+            <div id="inputs">
+                <input type="text" id="message" name="message">
+                <input type="button" id="envoyer" value="Envoyer">
+            </div>
+        </div>
     </body>
 
     <footer>
+        <script>
+            async function main(){
+                let inputs = document.getElementById("inputs");
+                let chat = document.getElementById("chat");
+                let btn = document.getElementById("envoyer");
+                let userInput = document.getElementById("message");
+
+                btn.addEventListener('click', async (event) => {
+                    let msg = createDivMessage();
+                    treatMessage(msg);
+                });
+
+                userInput.addEventListener('keydown', (e) =>{
+                    if (e.key == "Enter") {
+                        let msg = createDivMessage();
+                        treatMessage(msg);
+                    }
+                });
+            }
+
+            function createDivMessage(){
+                    let message = document.getElementById("message");
+                    let msg = message.value;
+                    if (message.value === "") return;
+
+                    let div = document.createElement("div");
+                    div.textContent = msg;
+                    div.setAttribute('class', 'container');
+                    chat.insertBefore(div, inputs);
+                    message.value = "";
+                    return msg
+                }
+
+            function createDivBotMessage(text){
+                let div = document.createElement("div");
+                div.textContent = text;
+                div.setAttribute('class', 'container');
+                chat.insertBefore(div, inputs);
+                message.value = "";
+            }                  
+
+            async function treatMessage(message){
+                if (!message.includes('!liste') && !message.includes('!commander')){
+                    createDivBotMessage("Désolé je ne comprend pas");
+                }else{
+                    if (message.includes('!liste')){
+                        let obj = await getPizzas();
+                        let str = "Voici les pizzas disponibles :";
+                        obj.forEach(i => str+=" "+ i.name + ",");
+                        createDivBotMessage(str);
+                    }
+                }
+            }
+
+            main();
+        </script>
     </footer>
 </html>
