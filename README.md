@@ -1,5 +1,6 @@
-#Partiel de Technolog
+# Partiel de Technolog
 ***
+
 Pour lancer le projet en environnement de production :
 ```
 docker-compose up
