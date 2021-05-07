@@ -3,7 +3,7 @@
 //====================================
 
 /** Imports */
-import { Mongoose } from 'mongoose';
+import { model, Model, Mongoose, Document, Schema } from 'mongoose';
 
 /** Mongoose instance */
 const db = new Mongoose();
@@ -17,23 +17,33 @@ db.connect('mongodb://partiel_db:27017', {
     useUnifiedTopology: true
 });
 
+/** Definition of pizza object (document for mongo) */
+export interface IPizza{
+    name:string,
+    desc:string,
+    keywords:string[],
+    deliveryTime:number
+}
 
-/** Schema */
-const testSchema = new db.Schema({
-    name: String,
+/** Pizza schema for document */
+const PizzaSchema: Schema = new Schema({
+    name: {type:String, required: true},
+    desc: {type:String, required: true},
+    keywords: {type:Array, required:false},
+    deliveryTime: {type:Number, required:true}
 });
 
-/** Model */
-const testModel = db.model("Test", testSchema, "Test");
+/** Pizza model for mongo */
+const PizzaModel = db.model('Pizza', PizzaSchema);
 
 /**
- * Add new entry in mongo
+ * Add new pizza in collection
  * 
- * @param name property value
+ * @param pizza Pizza object
  * @returns Promise<boolean>
  */
-export async function addNewEntry(name:string):Promise<boolean>{
-    const document = await testModel.create({name:name});
+export async function addNewPizza(pizza: IPizza){
+    const document = await PizzaModel.create(pizza);
 
     if (document) return true;
     else return false;

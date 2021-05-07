@@ -7,7 +7,7 @@ import express from 'express';
 import { type } from 'os';
 import { stringify } from 'querystring';
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
-import { addNewEntry } from './app/mongo';
+import { IPizza, addNewPizza } from './app/mongo';
 import cors from 'cors';
 
 /** Express instance */
@@ -31,20 +31,32 @@ app.get('/version', (req:express.Request, res:express.Response) => {
  * HTTP : [POST]
  * Add new document
  */
-app.post('/create', (req:express.Request, res:express.Response) => {
+app.post('/pizzas/add', (req:express.Request, res:express.Response) => {
     // Check for bad request
-    if(!req.body.name || typeof req.body.name !== "string")
+    if ((!req.body.name || typeof req.body.name !== "string")
+        || (!req.body.desc || typeof req.body.desc !== "string")
+        || (req.body.keywords && !Array.isArray(req.body.keywords))
+        || (!req.body.deliveryTime && typeof req.body.deliveryTime !== "number"))
         res.status(400).json({message:"Bad request body"});
     // Perform logic
     else{
-        addNewEntry(req.body.name)
-                    .then((result) =>{
-                        if (result) return res.status(200).json({message:"Good request, entry added"});
-                        else return res.status(400).json({message:"Something went wrong, entry not added"});
-                    })
-                    .catch((err) => {
-                        console.log(`Error : ${err}`);
-                    });
+        // Build pizza
+        const pizza : IPizza = {
+            name: req.body.name,
+            desc: req.body.desc,
+            keywords: req.body.keywords,
+            deliveryTime: req.body.deliveryTime
+        }
+
+        // Persist pizza
+        addNewPizza(pizza)
+        .then((result) =>{
+            if (result) return res.status(200).json({message:"Good request, entry added"});
+            else return res.status(400).json({message:"Something went wrong, entry not added"});
+        })
+        .catch((err) => {
+            console.log(`Error : ${err}`);
+        });
     }
 })
 
