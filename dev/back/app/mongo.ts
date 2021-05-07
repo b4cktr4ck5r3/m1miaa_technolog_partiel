@@ -48,3 +48,8 @@ export async function addNewPizza(pizza: IPizza){
     if (document) return true;
     else return false;
 }
+
+export async function getPizzas(){
+    const pizzas = await PizzaModel.find();
+    return pizzas;
+}

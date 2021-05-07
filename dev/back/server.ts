@@ -7,7 +7,7 @@ import express from 'express';
 import { type } from 'os';
 import { stringify } from 'querystring';
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
-import { IPizza, addNewPizza } from './app/mongo';
+import { IPizza, addNewPizza, getPizzas } from './app/mongo';
 import cors from 'cors';
 
 /** Express instance */
@@ -28,8 +28,20 @@ app.get('/version', (req:express.Request, res:express.Response) => {
 });
 
 /**
+ * HTTP : [GET]
+ * Return pizza collection
+ */
+app.get('/pizzas', (req:express.Request, res:express.Response) => {
+    getPizzas()
+    .then((result) => {
+        if (result) return res.status(200).json(result);
+        else return res.status(400).json({message:"Something went wrong, no collection found"});
+    });
+});
+
+/**
  * HTTP : [POST]
- * Add new document
+ * Add new pizza document
  */
 app.post('/pizzas/add', (req:express.Request, res:express.Response) => {
     // Check for bad request
