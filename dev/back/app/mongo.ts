@@ -49,6 +49,10 @@ export async function addNewPizza(pizza: IPizza){
     else return false;
 }
 
+/**
+ * Return pizza's collection
+ * @returns Collection of pizza
+ */
 export async function getPizzas(){
     const pizzas = await PizzaModel.find();
     return pizzas;
