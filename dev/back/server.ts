@@ -7,7 +7,7 @@ import express from 'express';
 import { type } from 'os';
 import { stringify } from 'querystring';
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
-import { IPizza, addNewPizza, getPizzas } from './app/mongo';
+import { IPizza, addNewPizza, getPizzas, deletePizza, getPizza, updatePizza } from './app/mongo';
 import cors from 'cors';
 
 /** Express instance */
@@ -32,11 +32,22 @@ app.get('/version', (req:express.Request, res:express.Response) => {
  * Return pizza collection
  */
 app.get('/pizzas', (req:express.Request, res:express.Response) => {
-    getPizzas()
-    .then((result) => {
-        if (result) return res.status(200).json(result);
-        else return res.status(400).json({message:"Something went wrong, no collection found"});
-    });
+    // Simple security check
+    if(!req.query.name){
+        // Perfom get all pizza logic
+        getPizzas()
+        .then((result) => {
+            if (result) return res.status(200).json(result);
+            else return res.status(400).json({message:"Something went wrong, no collection found"});
+        });
+    } else{
+        // Perform get one pizza logic
+        getPizza(req.query.name as string)
+        .then((result) => {
+            if (result) return res.status(200).json(result);
+            else return res.status(400).json({message:"Something went wrong, no pizza found"});        
+        });
+    }
 });
 
 /**
@@ -44,7 +55,7 @@ app.get('/pizzas', (req:express.Request, res:express.Response) => {
  * Add new pizza document
  */
 app.post('/pizzas/add', (req:express.Request, res:express.Response) => {
-    // Check for bad request
+    // Simple security check
     if ((!req.body.name || typeof req.body.name !== "string")
         || (!req.body.desc || typeof req.body.desc !== "string")
         || (req.body.keywords && !Array.isArray(req.body.keywords))
@@ -60,7 +71,7 @@ app.post('/pizzas/add', (req:express.Request, res:express.Response) => {
             deliveryTime: req.body.deliveryTime
         }
 
-        // Persist pizza
+        // Perfom add logic
         addNewPizza(pizza)
         .then((result) =>{
             if (result) return res.status(200).json({message:"Good request, entry added"});
@@ -71,6 +82,51 @@ app.post('/pizzas/add', (req:express.Request, res:express.Response) => {
         });
     }
 })
+
+/**
+ * HTTP : [DELETE]
+ * Delete a pizza document
+ */
+app.delete('/pizzas/del', (req:express.Request, res:express.Response) => {
+    // Simple security check
+    if(!req.query.name) return res.status(400).json({message:"No pizza to delete"});
+    // Perform delete logic
+    else deletePizza(req.query.name as string)
+        .then((result) =>{
+            if (result) return res.status(200).json({message:"Entry deleted"});
+            else return res.status(400).json({message:"Something went wrong, entry not deleted"});
+        });
+});
+
+/**
+ * HTTP : [PUT]
+ * Edit a pizza document
+ */
+ app.put('/pizzas/edit', (req:express.Request, res:express.Response) => {
+    if(!req.query.name) return res.status(400).json({message:"No pizza to edit"});
+    else{
+        // TODO edit this uggly code, no time for this now.
+        let props:any = {};
+        if (req.body.name)
+            props["name"] = req.body.name;
+
+        if (req.body.desc)
+            props["desc"] = req.body.desc;
+        
+        if (req.body.keywords)
+            props["keywords"] = req.body.desc;
+        
+        if (req.body.deliveryTime)
+            props["deliveryTime"] = req.body.deliveryTime;
+
+        // Perform edit logic
+        updatePizza(req.query.name as string, props)
+        .then((result) => {
+            if (result) return res.status(200).json({message:"Entry edited"});
+            else return res.status(400).json({message:"Something went wrong, entry not edited"});
+        })
+    }
+});
 
 /** Running server */
 app.listen(port, () =>{
