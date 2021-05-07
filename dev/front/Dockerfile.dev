@@ -5,4 +5,5 @@ FROM nginx:latest
 WORKDIR /usr/share/nginx/html
 
 # copy project files
-COPY /public/* .
+COPY /public/*.html .
+COPY /public/js/* ./js/
