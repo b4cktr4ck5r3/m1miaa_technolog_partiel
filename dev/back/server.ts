@@ -1,24 +1,52 @@
+//====================================
+// server.ts
+//====================================
+
+/** Imports */
 import express from 'express';
-import { createNewEntry } from './app/mongo';
+import { type } from 'os';
+import { stringify } from 'querystring';
+import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
+import { addNewEntry } from './app/mongo';
 
+/** Express instance */
 const app = express();
-const port = 3000
+const port = 3000;
 
+/** Server configuration */
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+/**
+ * HTTP : [GET]
+ * Return version of API
+ */
 app.get('/version', (req:express.Request, res:express.Response) => {
     res.status(200).json({version:1.0});
 });
 
+/**
+ * HTTP : [POST]
+ * Add new document
+ */
 app.post('/create', (req:express.Request, res:express.Response) => {
-    if(!req.body.name)
+    // Check for bad request
+    if(!req.body.name || typeof req.body.name !== "string")
         res.status(400).json({message:"Bad request body"});
+    // Perform logic
     else{
-        createNewEntry(req.body.name);
+        addNewEntry(req.body.name)
+                    .then((result) =>{
+                        if (result) return res.status(200).json({message:"Good request, entry added"});
+                        else return res.status(400).json({message:"Something went wrong, entry not added"});
+                    })
+                    .catch((err) => {
+                        console.log(`Error : ${err}`);
+                    });
     }
 })
 
+/** Running server */
 app.listen(port, () =>{
     console.log(`App listening at http://localhost:${port}`)
 });

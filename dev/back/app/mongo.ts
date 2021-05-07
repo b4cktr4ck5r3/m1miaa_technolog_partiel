@@ -1,7 +1,14 @@
+//====================================
+// mongo.ts
+//====================================
+
+/** Imports */
 import { Mongoose } from 'mongoose';
 
+/** Mongoose instance */
 const db = new Mongoose();
 
+/* Database connection */
 db.connect('mongodb://partiel_db:27017', {
     auth: {user: "partiel", password:"partiel"},
     dbName: "partiel",
@@ -10,23 +17,24 @@ db.connect('mongodb://partiel_db:27017', {
     useUnifiedTopology: true
 });
 
+
+/** Schema */
 const testSchema = new db.Schema({
     name: String,
 });
 
+/** Model */
 const testModel = db.model("Test", testSchema, "Test");
 
-export function createNewEntry(name:string){
-    const instance = new testModel({
-        name:name
-    });
+/**
+ * Add new entry in mongo
+ * 
+ * @param name property value
+ * @returns Promise<boolean>
+ */
+export async function addNewEntry(name:string):Promise<boolean>{
+    const document = await testModel.create({name:name});
 
-    instance.save((err, result) => {
-        if (err){
-            console.log(err);
-        } 
-        else {
-            console.log(result);
-        }
-    });
+    if (document) return true;
+    else return false;
 }
