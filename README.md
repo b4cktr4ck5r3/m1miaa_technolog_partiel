@@ -1,6 +1,10 @@
 # Partiel de Technolog
 ***
 
+Les images sont disponibles sur [DockerHub](https://hub.docker.com/) :
+- [Front](https://hub.docker.com/repository/docker/backtrack5r3/exam_front)
+- [Back](https://hub.docker.com/repository/docker/backtrack5r3/exam_back)
+
 Pour lancer le projet en environnement de production :
 ```
 docker-compose up
@@ -19,6 +23,7 @@ Il est également possible de build et push les images issues des Dockerfile de 
 - Pour Linux/Mac :
 ```
 ./publish.sh [dev] (par défaut la commandes agit en mode prod)
+```
 
 Une interface graphique pour Mongo est disponible à l'adresse suivante pour les deux environnements :
 ```
