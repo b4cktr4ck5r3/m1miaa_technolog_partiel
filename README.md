@@ -1,4 +1,4 @@
-# Partiel de Technolog
+# Partiel de Technolog (SUJET A) - Tom FLENNER
 ***
 
 Les images sont disponibles sur [DockerHub](https://hub.docker.com/) :
