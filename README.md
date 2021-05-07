@@ -19,3 +19,8 @@ Il est également possible de build et push les images issues des Dockerfile de 
 - Pour Linux/Mac :
 ```
 ./publish.sh [dev] (par défaut la commandes agit en mode prod)
+
+Une interface graphique pour Mongo est disponible à l'adresse suivante pour les deux environnements :
+```
+http://localhost:8081/
+```
