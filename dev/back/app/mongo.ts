@@ -56,12 +56,15 @@ export async function addNewPizza(pizza: IPizza){
  * @param pizza Name of pizza being deleted
  */
 export async function deletePizza(pizza: string){
+    let res:boolean = true;
     const result = await PizzaModel.findOneAndDelete({name: pizza}, null, (err) => {
-        if (err) console.log(err);
+        if (err) {
+            console.log(err);
+            res = false;
+        }
     });
 
-    if (result) return true;
-    else return false;
+    return res;
 }
 
 /**
@@ -71,12 +74,15 @@ export async function deletePizza(pizza: string){
  * @returns 
  */
 export async function updatePizza(name: string,  properties:any){
+    let res:boolean = true;
     const result = await PizzaModel.findOneAndUpdate({name: name}, properties, null, (err) => {
-        if (err) console.log(err);
+        if (err) {
+            console.log(err);
+            res = false;
+        }
     });
-
-    if (result) return true;
-    else return false;
+    
+    return res;
 }
 
 /**
