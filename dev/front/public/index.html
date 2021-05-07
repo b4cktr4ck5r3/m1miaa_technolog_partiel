@@ -6,6 +6,13 @@
     </header>
 
     <style>
+        html *
+        {
+        font-size: 1em !important;
+        color: #000 !important;
+        font-family: Arial !important;
+        }
+
         .container{
             border: 2px solid #000;
             background-color: #f1f1f1;
@@ -21,7 +28,7 @@
         <h2>Chat</h2>
         <p>Les commandes disponibles sont :<br>
             - <b>!liste</b> pour afficher les pizzas disponibles<br>
-            - <b>!commander</b> <nom_pizza> pour commander une pizza<br>
+            - <b>!commander nom_pizza</b> pour commander une pizza<br>
         </p>
         <div class="container" id="chat">
             <div id="inputs">
@@ -79,8 +86,21 @@
                 }else{
                     if (message.includes('!liste')){
                         let obj = await getPizzas();
-                        let str = "Voici les pizzas disponibles :";
-                        obj.forEach(i => str+=" "+ i.name + ",");
+                        let str;
+                        if (!obj.length){
+                            str = "Il n'y a pas de pizza disponibles désolé.";
+                        } 
+                        else{
+                            str = "Voici les pizzas disponibles :";
+                            obj.forEach(i => str+=" "+ i.name + ",");
+                        }
+                        createDivBotMessage(str);
+                    } else if (message.startsWith('!commander')){
+                        let command = message.split(' ');
+                        let obj = await getPizza(command[1]);
+                        let str;
+                        if (obj === 400) str = "Désolé nous n'avons pas pu commander votre pizza, elle est sûrement indisponible."
+                        else if (obj === 200) str = "Votre pizza a été commandé."
                         createDivBotMessage(str);
                     }
                 }
