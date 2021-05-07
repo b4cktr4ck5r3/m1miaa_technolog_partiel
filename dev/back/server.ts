@@ -8,6 +8,7 @@ import { type } from 'os';
 import { stringify } from 'querystring';
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 import { addNewEntry } from './app/mongo';
+import cors from 'cors';
 
 /** Express instance */
 const app = express();
@@ -16,6 +17,7 @@ const port = 3000;
 /** Server configuration */
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(cors());
 
 /**
  * HTTP : [GET]
