@@ -1,5 +1,8 @@
 # Partiel de Technolog (SUJET A) - Tom FLENNER
-***
+Projet réalisé dans le cadre du cours Technologie Logicielle enseigné en Master 1 Miage.
+Réalisation :
+- Création d'une API Rest avec Node.js et Express
+- Dockerisation de l'environnement de développement et de production
 
 Les images sont disponibles sur [DockerHub](https://hub.docker.com/) :
 - [Front](https://hub.docker.com/repository/docker/backtrack5r3/exam_front)
