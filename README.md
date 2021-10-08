@@ -1,4 +1,4 @@
-# Partiel de Technolog (SUJET A) - Tom FLENNER
+# Partiel de Technolog
 Projet réalisé dans le cadre du cours Technologie Logicielle enseigné en Master 1 Miage.
 Réalisation :
 - Création d'une API Rest avec Node.js et Express
